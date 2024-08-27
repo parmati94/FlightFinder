@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from config import TOKEN
 from services.CustomFlightRadarAPI import CustomFlightRadarAPI
+from logging_config import logger
 import asyncio
 
 intents = discord.Intents.default()
@@ -15,28 +16,28 @@ async def on_ready():
     global airlines_dict
     try:
         s = await bot.tree.sync()
-        print(f'S:  {s}')
-        print(f'Synced {len(s)} commands')
+        logger.info(f'S:  {s}')
+        logger.info(f'Synced {len(s)} commands')
             
     except Exception as e:
-        print(f'Error syncing commands: {e}')
+        logger.info(f'Error syncing commands: {e}')
         
-    print(f'Logged in as {bot.user.name}')
+    logger.info(f'Logged in as {bot.user.name}')
 
 async def main():
     try:
         async with bot:
-            print("Loading extension 'cogs.commands'...")
+            logger.info("Loading extension 'cogs.commands'...")
             await bot.load_extension('cogs.commands')
-            print("Extension 'cogs.commands' loaded successfully.")
+            logger.info("Extension 'cogs.commands' loaded successfully.")
              # Check loaded extensions
-            print("Loaded extensions:")
+            logger.info("Loaded extensions:")
             for ext in bot.extensions:
-                print(f' - {ext}')
-            print("Starting bot...")
+                logger.info(f' - {ext}')
+            logger.info("Starting bot...")
             await bot.start(TOKEN)
     except Exception as e:
-        print(f'Failed to start bot: {e}')
+        logger.info(f'Failed to start bot: {e}')
 
 if __name__ == "__main__":
     asyncio.run(main())

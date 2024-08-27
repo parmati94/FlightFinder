@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import app_commands
 from datetime import datetime
 from services.CustomFlightRadarAPI import CustomFlightRadarAPI
+from logging_config import logger
 from utils.helpers import convert_timestamp
 
 class Commands(commands.Cog):
@@ -20,13 +21,15 @@ class Commands(commands.Cog):
         await interaction.response.send_message(f"Pong! Latency is {self.bot.latency}")
     
     @app_commands.command(name="flight", description="Retrieve flight information via flight number.")
-    async def flight_slash(self, interaction: discord.Interaction, flight_number: str):
+    async def flight_slash(self, interaction: discord.Interaction, flight_number: str):        
         flight_number = flight_number.upper()
+        logger.info(f"/flight command used for flight: {flight_number}")
         airline_code = flight_number[:2]
         airline_icao = self.airlines_dict.get(airline_code, {}).get('ICAO', None)
         
         flight = self.fr_api.get_flight(airline_icao, flight_number)
         if not flight:
+            logger.info(f"Flight not found - sending error message to Discord.")
             await interaction.response.send_message(f"Flight {flight_number} not found.")
             return
         
@@ -63,10 +66,10 @@ class Commands(commands.Cog):
                 embed.set_thumbnail(url=first_thumbnail["src"])
 
         embed.set_footer(text="Flight data provided by FlightRadar24")
-
+        logger.info(f"Sending embed to Discord for: {flight_number}")
         await interaction.response.send_message(embed=embed)
 
 async def setup(bot):
-    print("Setting up Commands cog")
+    logger.info("Setting up Commands cog")
     await bot.add_cog(Commands(bot))
-    print("Commands cog has been added")
+    logger.info("Commands cog has been added")
