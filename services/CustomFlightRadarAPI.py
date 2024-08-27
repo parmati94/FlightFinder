@@ -43,7 +43,7 @@ class CustomFlightRadarAPI(FlightRadar24API):
             details=details
         )
         if flight_number:
-            flights = [flight for flight in flights if flight.number == flight_number]
+            flights = [flight for flight in flights if flight.number == flight_number or flight.callsign == flight_number]
             if flights:
                 return flights
         if destination:

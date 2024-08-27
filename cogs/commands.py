@@ -42,6 +42,8 @@ class Commands(commands.Cog):
             color=discord.Color.blue(),
             timestamp=datetime.now()
         )
+        
+        flightradar_url = f"https://www.flightradar24.com/{flight.callsign}"
 
         embed.add_field(name="Airline ICAO", value=airline_icao, inline=True)
         embed.add_field(name="Scheduled Departure", value=scheduled_departure, inline=True)
@@ -49,6 +51,7 @@ class Commands(commands.Cog):
         embed.add_field(name="Estimated Arrival", value=estimated_arrival, inline=True)
         embed.add_field(name="Origin Airport", value=flight.origin_airport_iata, inline=True)
         embed.add_field(name="Destination Airport", value=flight.destination_airport_iata, inline=True)
+        embed.add_field(name="Flight URL", value=f"[{flight_number}]({flightradar_url})", inline=True)
 
         if flight.aircraft_model:
             embed.add_field(name="Aircraft", value=flight.aircraft_model, inline=True)
