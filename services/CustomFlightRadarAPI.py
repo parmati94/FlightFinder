@@ -27,6 +27,7 @@ class CustomFlightRadarAPI(FlightRadar24API):
         registration: Optional[str] = None,
         aircraft_type: Optional[str] = None,
         destination: Optional[str] = None,
+        origin: Optional[str] = None,
         flight_number: Optional[str] = None,
         *,
         details: bool = False
@@ -48,6 +49,8 @@ class CustomFlightRadarAPI(FlightRadar24API):
                 return flights
         if destination:
             flights = [flight for flight in flights if flight.destination_airport_iata == destination]
+        if origin:
+            flights = [flight for flight in flights if flight.origin_airport_iata == destination]
         # Add custom behavior here
         print("Custom behavior for getting flight data.")
         return flights
